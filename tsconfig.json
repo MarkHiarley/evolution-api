@@ -27,8 +27,7 @@
       "@utils/*": ["./src/utils/*"],
       "@validate/*": ["./src/validate/*"]
     },
-    "moduleResolution": "bundler",
-    "ignoreDeprecations": "6.0"
+    "moduleResolution": "node"
   },
   "exclude": ["node_modules", "./test", "./dist", "./prisma"],
   "include": [
