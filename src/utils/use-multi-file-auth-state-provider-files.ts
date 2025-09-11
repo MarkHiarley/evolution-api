@@ -100,10 +100,8 @@ export class AuthStateProvider {
               ids.map(async (id) => {
                 const value = await readData(`${type}-${id}`);
                 if (type === 'app-state-sync-key' && value) {
-                  // Note: fromObject method removed from Baileys, using direct assignment
-                  //                  // Note: fromObject method removed from Baileys, using direct assignment
-                  // value = proto.Message.AppStateSyncKeyData.fromObject(value);
-                  // Direct assignment for now, may need proper type handling later
+                  // Note: fromObject method removed from Baileys, keeping original value
+                  // TODO: May need proper type handling for app-state-sync-key in future Baileys versions
                 }
 
                 data[id] = value;
