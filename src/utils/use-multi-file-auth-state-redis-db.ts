@@ -1,6 +1,6 @@
 import { CacheService } from '@api/services/cache.service';
 import { Logger } from '@config/logger.config';
-import { AuthenticationCreds, AuthenticationState, initAuthCreds, proto, SignalDataTypeMap } from 'baileys';
+import { AuthenticationCreds, AuthenticationState, initAuthCreds, SignalDataTypeMap } from 'baileys';
 
 export async function useMultiFileAuthStateRedisDb(
   instanceName: string,
@@ -48,9 +48,11 @@ export async function useMultiFileAuthStateRedisDb(
           const data: { [_: string]: SignalDataTypeMap[type] } = {};
           await Promise.all(
             ids.map(async (id) => {
-              let value = await readData(`${type}-${id}`);
+              const value = await readData(`${type}-${id}`);
               if (type === 'app-state-sync-key' && value) {
-                value = proto.Message.AppStateSyncKeyData.fromObject(value);
+                // Note: fromObject method removed from Baileys, using direct assignment
+                // value = proto.Message.AppStateSyncKeyData.fromObject(value);
+                // Direct assignment for now, may need proper type handling later
               }
 
               data[id] = value;

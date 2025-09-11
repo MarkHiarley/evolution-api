@@ -574,14 +574,18 @@ export class ChatwootService {
       return null;
     }
 
-    const isLid = body.key.previousRemoteJid?.includes('@lid') && body.key.senderPn;
+    // Temporarily disabled due to Baileys API changes
+    // const isLid = body.key.previousRemoteJid?.includes('@lid') && body.key.senderPn;
+    const isLid = false; // Disabled for now
     const remoteJid = body.key.remoteJid;
     const cacheKey = `${instance.instanceName}:createConversation-${remoteJid}`;
     const lockKey = `${instance.instanceName}:lock:createConversation-${remoteJid}`;
     const maxWaitTime = 5000; // 5 secounds
 
     try {
-      // Processa atualização de contatos já criados @lid
+      // Processa atualização de contatos já criados @lid - temporarily disabled due to Baileys API changes
+      // Note: senderPn property has been removed from Baileys, this code needs to be refactored
+      /*
       if (isLid && body.key.senderPn !== body.key.previousRemoteJid) {
         const contact = await this.findContact(instance, body.key.remoteJid.split('@')[0]);
         if (contact && contact.identifier !== body.key.senderPn) {
@@ -604,6 +608,7 @@ export class ChatwootService {
           }
         }
       }
+      */
       this.logger.verbose(`--- Start createConversation ---`);
       this.logger.verbose(`Instance: ${JSON.stringify(instance)}`);
 

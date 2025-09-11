@@ -36,7 +36,7 @@
 
 import { ProviderFiles } from '@api/provider/sessions';
 import { Logger } from '@config/logger.config';
-import { AuthenticationCreds, AuthenticationState, BufferJSON, initAuthCreds, proto, SignalDataTypeMap } from 'baileys';
+import { AuthenticationCreds, AuthenticationState, BufferJSON, initAuthCreds, SignalDataTypeMap } from 'baileys';
 import { isNotEmpty } from 'class-validator';
 
 export type AuthState = { state: AuthenticationState; saveCreds: () => Promise<void> };
@@ -98,9 +98,12 @@ export class AuthStateProvider {
             const data: { [_: string]: SignalDataTypeMap[type] } = {};
             await Promise.all(
               ids.map(async (id) => {
-                let value = await readData(`${type}-${id}`);
+                const value = await readData(`${type}-${id}`);
                 if (type === 'app-state-sync-key' && value) {
-                  value = proto.Message.AppStateSyncKeyData.fromObject(value);
+                  // Note: fromObject method removed from Baileys, using direct assignment
+                  //                  // Note: fromObject method removed from Baileys, using direct assignment
+                  // value = proto.Message.AppStateSyncKeyData.fromObject(value);
+                  // Direct assignment for now, may need proper type handling later
                 }
 
                 data[id] = value;

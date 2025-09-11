@@ -110,7 +110,7 @@ import makeWASocket, {
   isJidBroadcast,
   isJidGroup,
   isJidNewsletter,
-  isJidUser,
+  isLidUser,
   makeCacheableSignalKeyStore,
   MessageUpsertType,
   MessageUserReceiptUpdate,
@@ -982,9 +982,10 @@ export class BaileysStartupService extends ChannelStartupService {
             continue;
           }
 
-          if (m.key.remoteJid?.includes('@lid') && m.key.senderPn) {
-            m.key.remoteJid = m.key.senderPn;
-          }
+          // Temporarily disabled due to Baileys API changes
+          // if (m.key.remoteJid?.includes('@lid') && m.key.senderPn) {
+          //   m.key.remoteJid = m.key.senderPn;
+          // }
 
           if (Long.isLong(m?.messageTimestamp)) {
             m.messageTimestamp = m.messageTimestamp?.toNumber();
@@ -1048,10 +1049,11 @@ export class BaileysStartupService extends ChannelStartupService {
     ) => {
       try {
         for (const received of messages) {
-          if (received.key.remoteJid?.includes('@lid') && received.key.senderPn) {
-            (received.key as { previousRemoteJid?: string | null }).previousRemoteJid = received.key.remoteJid;
-            received.key.remoteJid = received.key.senderPn;
-          }
+          // Temporarily disabled due to Baileys API changes
+          // if (received.key.remoteJid?.includes('@lid') && received.key.senderPn) {
+          //   (received.key as { previousRemoteJid?: string | null }).previousRemoteJid = received.key.remoteJid;
+          //   received.key.remoteJid = received.key.senderPn;
+          // }
           if (
             received?.messageStubParameters?.some?.((param) =>
               [
@@ -1407,9 +1409,10 @@ export class BaileysStartupService extends ChannelStartupService {
           continue;
         }
 
-        if (key.remoteJid?.includes('@lid') && key.senderPn) {
-          key.remoteJid = key.senderPn;
-        }
+        // Temporarily disabled due to Baileys API changes
+        // if (key.remoteJid?.includes('@lid') && key.senderPn) {
+        //   key.remoteJid = key.senderPn;
+        // }
 
         const updateKey = `${this.instance.id}_${key.id}_${update.status}`;
 
@@ -1910,7 +1913,7 @@ export class BaileysStartupService extends ChannelStartupService {
         quoted,
       });
       const id = await this.client.relayMessage(sender, message, { messageId });
-      m.key = { id: id, remoteJid: sender, participant: isJidUser(sender) ? sender : undefined, fromMe: true };
+      m.key = { id: id, remoteJid: sender, participant: isLidUser(sender) ? sender : undefined, fromMe: true };
       for (const [key, value] of Object.entries(m)) {
         if (!value || (isArray(value) && value.length) === 0) {
           delete m[key];
@@ -3367,7 +3370,7 @@ export class BaileysStartupService extends ChannelStartupService {
     try {
       const keys: proto.IMessageKey[] = [];
       data.readMessages.forEach((read) => {
-        if (isJidGroup(read.remoteJid) || isJidUser(read.remoteJid)) {
+        if (isJidGroup(read.remoteJid) || isLidUser(read.remoteJid)) {
           keys.push({ remoteJid: read.remoteJid, fromMe: read.fromMe, id: read.id });
         }
       });

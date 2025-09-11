@@ -1,7 +1,7 @@
 import { prismaRepository } from '@api/server.module';
 import { CacheService } from '@api/services/cache.service';
 import { INSTANCE_DIR } from '@config/path.config';
-import { AuthenticationState, BufferJSON, initAuthCreds, WAProto as proto } from 'baileys';
+import { AuthenticationState, BufferJSON, initAuthCreds } from 'baileys';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -151,9 +151,10 @@ export default async function useMultiFileAuthStatePrisma(
           const data = {};
           await Promise.all(
             ids.map(async (id) => {
-              let value = await readData(`${type}-${id}`);
+              const value = await readData(`${type}-${id}`);
               if (type === 'app-state-sync-key' && value) {
-                value = proto.Message.AppStateSyncKeyData.fromObject(value);
+                // Note: fromObject method removed from Baileys, keeping original value
+                // TODO: May need proper type handling for app-state-sync-key in future Baileys versions
               }
 
               data[id] = value;
