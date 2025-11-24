@@ -27,7 +27,7 @@ services:
     command: >
       redis-server --port 6379 --appendonly yes
     ports:
-      - "6380:6379"
+      - "6381:6379"
     volumes:
       - evolution_redis:/data
     networks:
@@ -57,7 +57,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USERNAME}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
-      - "5433:5432"
+      - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
